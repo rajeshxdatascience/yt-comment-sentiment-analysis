@@ -87,6 +87,5 @@ target/
 
 # Mypy cache
 .mypy_cache/
-/notebooks/lightGBM-final.ipynb
 /notebooks/word2vec.ipynb
 /notebooks/custom-features.ipynb
