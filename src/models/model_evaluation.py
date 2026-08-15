@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 from mlflow.models import infer_signature
+import mlflow.lightgbm
 
 import os
 from dotenv import load_dotenv
@@ -26,6 +27,14 @@ if not dagshub_token:
 # DagsHub credentials for MLflow
 os.environ["MLFLOW_TRACKING_USERNAME"] = "rajeshxdatascience"
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
+# MLflow tracking URI
+repo_owner = "rajeshxdatascience"
+repo_name = "yt-comment-sentiment-analysis"
+
+mlflow.set_tracking_uri(
+    f"https://dagshub.com/{repo_owner}/{repo_name}.mlflow"
+)
 
 # logging configuration
 logger = logging.getLogger('model_evaluation')
@@ -141,11 +150,6 @@ def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
 
 
 def main():
-    # MLflow tracking URI
-    repo_owner = "rajeshxdatascience"
-    repo_name = "yt-comment-sentiment-analysis"
-
-    mlflow.set_tracking_uri(f"https://dagshub.com/{repo_owner}/{repo_name}.mlflow")
 
     mlflow.set_experiment('dvc-pipeline-runs')
     
@@ -177,7 +181,7 @@ def main():
             signature = infer_signature(input_example, model.predict(X_test_tfidf[:5]))  # <--- Added for signature
 
             # Log model with signature
-            mlflow.sklearn.log_model(
+            mlflow.lightgbm.log_model(
                 model,
                 "lgbm_model",
                 signature=signature,  # <--- Added for signature
@@ -213,7 +217,7 @@ def main():
 
         except Exception as e:
             logger.error(f"Failed to complete model evaluation: {e}")
-            print(f"Error: {e}")
+            raise
 
 if __name__ == '__main__':
     main()
