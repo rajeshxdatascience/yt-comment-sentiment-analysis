@@ -181,16 +181,22 @@ def main():
             signature = infer_signature(input_example, model.predict(X_test_tfidf[:5]))  # <--- Added for signature
 
             # Log model with signature
-            mlflow.lightgbm.log_model(
+            logged_model = mlflow.lightgbm.log_model(
                 model,
                 "lgbm_model",
                 signature=signature,  # <--- Added for signature
                 input_example=input_example  # <--- Added input example
             )
 
-            # Save model info
-            model_path = "lgbm_model"
-            save_model_info(run.info.run_id, model_path, 'experiment_info.json')
+            # Save LoggedModel information
+            model_info = {
+                "run_id": run.info.run_id,
+                "model_id": logged_model.model_id,
+                "model_uri": logged_model.model_uri
+            }
+                        
+            with open(os.path.join(root_dir, "experiment_info.json"),"w") as file:
+                json.dump(model_info, file, indent=4)
 
             # Log the vectorizer as an artifact
             mlflow.log_artifact(os.path.join(root_dir, 'tfidf_vectorizer.pkl'))
