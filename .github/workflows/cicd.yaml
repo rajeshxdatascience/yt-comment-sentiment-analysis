@@ -29,6 +29,7 @@ jobs:
 
       - name: Run pipeline
         env:
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
           MLFLOW_TRACKING_USERNAME: rajeshxdatascience
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
         run: |
