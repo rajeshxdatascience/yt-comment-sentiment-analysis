@@ -67,3 +67,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git push origin ${{ github.ref_name }}
+
+      - name: Install test dependencies
+        run: |
+          pip install pytest
+
+      - name: Run model loading test
+        env:
+          DAGSHUB_ACCESS_KEY: ${{ secrets.DAGSHUB_ACCESS_KEY }}
+          DAGSHUB_SECRET_KEY: ${{ secrets.DAGSHUB_SECRET_KEY }}
+        run: |
+          pytest scripts/test_load_model.py
+      
