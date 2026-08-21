@@ -79,4 +79,12 @@ jobs:
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
         run: |
           pytest scripts/test_load_model.py
+
+      - name: Run model signature test
+        env:
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
+          MLFLOW_TRACKING_USERNAME: rajeshxdatascience
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
+        run: |
+          pytest scripts/test_load_signature.py
       
