@@ -74,8 +74,9 @@ jobs:
 
       - name: Run model loading test
         env:
-          DAGSHUB_ACCESS_KEY: ${{ secrets.DAGSHUB_ACCESS_KEY }}
-          DAGSHUB_SECRET_KEY: ${{ secrets.DAGSHUB_SECRET_KEY }}
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
+          MLFLOW_TRACKING_USERNAME: rajeshxdatascience
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
         run: |
           pytest scripts/test_load_model.py
       
