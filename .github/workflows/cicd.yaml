@@ -110,7 +110,7 @@ jobs:
           MLFLOW_TRACKING_USERNAME: rajeshxdatascience
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT }}
         run: |
-          python -m uvicorn app:app --host 0.0.0.0 --port 5000 > fastapi.log 2>&1 &
+          python -m uvicorn fast_api.app:app --host 0.0.0.0 --port 5000 > fastapi.log 2>&1 &
           sleep 15
 
           if ! curl --fail http://localhost:5000/; then
