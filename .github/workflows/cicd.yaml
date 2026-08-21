@@ -96,3 +96,11 @@ jobs:
         run: |
           pytest scripts/test_model_performance.py
       
+      - name: Promote model to production
+        if: success()
+        env:
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
+          MLFLOW_TRACKING_USERNAME: rajeshxdatascience
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
+        run: python scripts/promote_model.py
+      
