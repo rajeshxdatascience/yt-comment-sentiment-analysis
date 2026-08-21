@@ -103,4 +103,17 @@ jobs:
           MLFLOW_TRACKING_USERNAME: rajeshxdatascience
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT}}
         run: python scripts/promote_model.py
-      
+
+      - name: Start FastAPI server
+        env:
+          DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
+          MLFLOW_TRACKING_USERNAME: rajeshxdatascience
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_PAT }}
+        run: |
+          uvicorn app:app --host 0.0.0.0 --port 5000 &
+          sleep 15
+
+      - name: Run API tests
+        run: |
+          pytest scripts/test_fast_api.py
+            
