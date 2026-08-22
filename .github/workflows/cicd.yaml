@@ -121,4 +121,26 @@ jobs:
       - name: Run FastAPI tests
         run: |
           pytest scripts/test_fast_api.py
-            
+
+      - name: Login to Docker Hub
+        if: success()
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
+            -u "${{ secrets.DOCKERHUB_USERNAME }}" \
+            --password-stdin
+
+      - name: Build Docker image
+        if: success()
+        run: |
+          docker build -t yt-chrome-plugin .
+
+      - name: Tag Docker image
+        if: success()
+        run: |
+          docker tag yt-chrome-plugin:latest rajeshxdatascience/yt-chrome-plugin:latest
+
+      - name: Push Docker image to Docker Hub
+        if: success()
+        run: |
+          docker push rajeshxdatascience/yt-chrome-plugin:latest
+                  
