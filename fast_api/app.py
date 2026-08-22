@@ -26,6 +26,10 @@ from mlflow.tracking import MlflowClient
 
 import uvicorn
 
+import sys
+import lightgbm
+import sklearn
+
 
 # ==========================================
 # FastAPI App
@@ -125,6 +129,13 @@ def load_model_and_vectorizer(model_name,model_version,vectorizer_path):
 
     vectorizer = joblib.load(vectorizer_path)
 
+    print("========== MODEL DEBUG ==========")
+    print("Python:", sys.version)
+    print("LightGBM:", lightgbm.__version__)
+    print("Scikit-learn:", sklearn.__version__)
+    print("Vectorizer vocabulary:", len(vectorizer.vocabulary_))
+    print("=================================")  
+
     return model, vectorizer
 
 
@@ -169,6 +180,16 @@ def predict(request: CommentRequest):
 
         # Convert to string
         predictions = [str(pred)for pred in predictions]
+
+        X = vectorizer.transform(preprocessed_comments)
+
+        print("Preprocessed:", preprocessed_comments)
+        print("TF-IDF shape:", X.shape)
+        print("TF-IDF non-zero:", X.nnz)
+
+        predictions = model.predict(X)
+
+        print("RAW PREDICTIONS:", predictions)
 
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"Prediction failed: {str(e)}")
