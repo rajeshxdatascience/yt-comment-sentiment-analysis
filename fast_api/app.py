@@ -181,14 +181,9 @@ def predict(request: CommentRequest):
         # Convert to string
         predictions = [str(pred)for pred in predictions]
 
-        X = vectorizer.transform(preprocessed_comments)
-
         print("Preprocessed:", preprocessed_comments)
-        print("TF-IDF shape:", X.shape)
-        print("TF-IDF non-zero:", X.nnz)
-
-        predictions = model.predict(X)
-
+        print("TF-IDF shape:", transformed_comments.shape)
+        print("TF-IDF non-zero:", transformed_comments.nnz)
         print("RAW PREDICTIONS:", predictions)
 
     except Exception as e:
